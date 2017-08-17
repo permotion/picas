@@ -57,17 +57,17 @@ OBJECTDIR=build/${CND_CONF}/${IMAGE_TYPE}
 DISTDIR=dist/${CND_CONF}/${IMAGE_TYPE}
 
 # Source Files Quoted if spaced
-SOURCEFILES_QUOTED_IF_SPACED=
+SOURCEFILES_QUOTED_IF_SPACED=blinker_led.asm
 
 # Object Files Quoted if spaced
-OBJECTFILES_QUOTED_IF_SPACED=
-POSSIBLE_DEPFILES=
+OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/blinker_led.o
+POSSIBLE_DEPFILES=${OBJECTDIR}/blinker_led.o.d
 
 # Object Files
-OBJECTFILES=
+OBJECTFILES=${OBJECTDIR}/blinker_led.o
 
 # Source Files
-SOURCEFILES=
+SOURCEFILES=blinker_led.asm
 
 
 CFLAGS=
@@ -94,7 +94,23 @@ MP_LINKER_DEBUG_OPTION= -r=RAM@GPR:0xB0:0xBF
 # ------------------------------------------------------------------------------------
 # Rules for buildStep: assemble
 ifeq ($(TYPE_IMAGE), DEBUG_RUN)
+${OBJECTDIR}/blinker_led.o: blinker_led.asm  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}" 
+	@${RM} ${OBJECTDIR}/blinker_led.o.d 
+	@${RM} ${OBJECTDIR}/blinker_led.o 
+	@${FIXDEPS} dummy.d -e "${OBJECTDIR}/blinker_led.err" $(SILENT) -c ${MP_AS} $(MP_EXTRA_AS_PRE) -d__DEBUG -d__MPLAB_DEBUGGER_PK3=1 -q -p$(MP_PROCESSOR_OPTION) -u  -l\\\"${OBJECTDIR}/blinker_led.lst\\\" -e\\\"${OBJECTDIR}/blinker_led.err\\\" $(ASM_OPTIONS)    -o\\\"${OBJECTDIR}/blinker_led.o\\\" \\\"blinker_led.asm\\\" 
+	@${DEP_GEN} -d "${OBJECTDIR}/blinker_led.o"
+	@${FIXDEPS} "${OBJECTDIR}/blinker_led.o.d" $(SILENT) -rsi ${MP_AS_DIR} -c18 
+	
 else
+${OBJECTDIR}/blinker_led.o: blinker_led.asm  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}" 
+	@${RM} ${OBJECTDIR}/blinker_led.o.d 
+	@${RM} ${OBJECTDIR}/blinker_led.o 
+	@${FIXDEPS} dummy.d -e "${OBJECTDIR}/blinker_led.err" $(SILENT) -c ${MP_AS} $(MP_EXTRA_AS_PRE) -q -p$(MP_PROCESSOR_OPTION) -u  -l\\\"${OBJECTDIR}/blinker_led.lst\\\" -e\\\"${OBJECTDIR}/blinker_led.err\\\" $(ASM_OPTIONS)    -o\\\"${OBJECTDIR}/blinker_led.o\\\" \\\"blinker_led.asm\\\" 
+	@${DEP_GEN} -d "${OBJECTDIR}/blinker_led.o"
+	@${FIXDEPS} "${OBJECTDIR}/blinker_led.o.d" $(SILENT) -rsi ${MP_AS_DIR} -c18 
+	
 endif
 
 # ------------------------------------------------------------------------------------
