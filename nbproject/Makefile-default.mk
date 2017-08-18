@@ -57,17 +57,17 @@ OBJECTDIR=build/${CND_CONF}/${IMAGE_TYPE}
 DISTDIR=dist/${CND_CONF}/${IMAGE_TYPE}
 
 # Source Files Quoted if spaced
-SOURCEFILES_QUOTED_IF_SPACED=blinker_led.asm
+SOURCEFILES_QUOTED_IF_SPACED=blinker_led.asm delay_16mhz.asm delay_4mhz.asm uart_sample.asm i2c_sample.asm spi_sample.asm
 
 # Object Files Quoted if spaced
-OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/blinker_led.o
-POSSIBLE_DEPFILES=${OBJECTDIR}/blinker_led.o.d
+OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/blinker_led.o ${OBJECTDIR}/delay_16mhz.o ${OBJECTDIR}/delay_4mhz.o ${OBJECTDIR}/uart_sample.o ${OBJECTDIR}/i2c_sample.o ${OBJECTDIR}/spi_sample.o
+POSSIBLE_DEPFILES=${OBJECTDIR}/blinker_led.o.d ${OBJECTDIR}/delay_16mhz.o.d ${OBJECTDIR}/delay_4mhz.o.d ${OBJECTDIR}/uart_sample.o.d ${OBJECTDIR}/i2c_sample.o.d ${OBJECTDIR}/spi_sample.o.d
 
 # Object Files
-OBJECTFILES=${OBJECTDIR}/blinker_led.o
+OBJECTFILES=${OBJECTDIR}/blinker_led.o ${OBJECTDIR}/delay_16mhz.o ${OBJECTDIR}/delay_4mhz.o ${OBJECTDIR}/uart_sample.o ${OBJECTDIR}/i2c_sample.o ${OBJECTDIR}/spi_sample.o
 
 # Source Files
-SOURCEFILES=blinker_led.asm
+SOURCEFILES=blinker_led.asm delay_16mhz.asm delay_4mhz.asm uart_sample.asm i2c_sample.asm spi_sample.asm
 
 
 CFLAGS=
@@ -102,6 +102,46 @@ ${OBJECTDIR}/blinker_led.o: blinker_led.asm  nbproject/Makefile-${CND_CONF}.mk
 	@${DEP_GEN} -d "${OBJECTDIR}/blinker_led.o"
 	@${FIXDEPS} "${OBJECTDIR}/blinker_led.o.d" $(SILENT) -rsi ${MP_AS_DIR} -c18 
 	
+${OBJECTDIR}/delay_16mhz.o: delay_16mhz.asm  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}" 
+	@${RM} ${OBJECTDIR}/delay_16mhz.o.d 
+	@${RM} ${OBJECTDIR}/delay_16mhz.o 
+	@${FIXDEPS} dummy.d -e "${OBJECTDIR}/delay_16mhz.err" $(SILENT) -c ${MP_AS} $(MP_EXTRA_AS_PRE) -d__DEBUG -d__MPLAB_DEBUGGER_PK3=1 -q -p$(MP_PROCESSOR_OPTION) -u  -l\\\"${OBJECTDIR}/delay_16mhz.lst\\\" -e\\\"${OBJECTDIR}/delay_16mhz.err\\\" $(ASM_OPTIONS)    -o\\\"${OBJECTDIR}/delay_16mhz.o\\\" \\\"delay_16mhz.asm\\\" 
+	@${DEP_GEN} -d "${OBJECTDIR}/delay_16mhz.o"
+	@${FIXDEPS} "${OBJECTDIR}/delay_16mhz.o.d" $(SILENT) -rsi ${MP_AS_DIR} -c18 
+	
+${OBJECTDIR}/delay_4mhz.o: delay_4mhz.asm  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}" 
+	@${RM} ${OBJECTDIR}/delay_4mhz.o.d 
+	@${RM} ${OBJECTDIR}/delay_4mhz.o 
+	@${FIXDEPS} dummy.d -e "${OBJECTDIR}/delay_4mhz.err" $(SILENT) -c ${MP_AS} $(MP_EXTRA_AS_PRE) -d__DEBUG -d__MPLAB_DEBUGGER_PK3=1 -q -p$(MP_PROCESSOR_OPTION) -u  -l\\\"${OBJECTDIR}/delay_4mhz.lst\\\" -e\\\"${OBJECTDIR}/delay_4mhz.err\\\" $(ASM_OPTIONS)    -o\\\"${OBJECTDIR}/delay_4mhz.o\\\" \\\"delay_4mhz.asm\\\" 
+	@${DEP_GEN} -d "${OBJECTDIR}/delay_4mhz.o"
+	@${FIXDEPS} "${OBJECTDIR}/delay_4mhz.o.d" $(SILENT) -rsi ${MP_AS_DIR} -c18 
+	
+${OBJECTDIR}/uart_sample.o: uart_sample.asm  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}" 
+	@${RM} ${OBJECTDIR}/uart_sample.o.d 
+	@${RM} ${OBJECTDIR}/uart_sample.o 
+	@${FIXDEPS} dummy.d -e "${OBJECTDIR}/uart_sample.err" $(SILENT) -c ${MP_AS} $(MP_EXTRA_AS_PRE) -d__DEBUG -d__MPLAB_DEBUGGER_PK3=1 -q -p$(MP_PROCESSOR_OPTION) -u  -l\\\"${OBJECTDIR}/uart_sample.lst\\\" -e\\\"${OBJECTDIR}/uart_sample.err\\\" $(ASM_OPTIONS)    -o\\\"${OBJECTDIR}/uart_sample.o\\\" \\\"uart_sample.asm\\\" 
+	@${DEP_GEN} -d "${OBJECTDIR}/uart_sample.o"
+	@${FIXDEPS} "${OBJECTDIR}/uart_sample.o.d" $(SILENT) -rsi ${MP_AS_DIR} -c18 
+	
+${OBJECTDIR}/i2c_sample.o: i2c_sample.asm  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}" 
+	@${RM} ${OBJECTDIR}/i2c_sample.o.d 
+	@${RM} ${OBJECTDIR}/i2c_sample.o 
+	@${FIXDEPS} dummy.d -e "${OBJECTDIR}/i2c_sample.err" $(SILENT) -c ${MP_AS} $(MP_EXTRA_AS_PRE) -d__DEBUG -d__MPLAB_DEBUGGER_PK3=1 -q -p$(MP_PROCESSOR_OPTION) -u  -l\\\"${OBJECTDIR}/i2c_sample.lst\\\" -e\\\"${OBJECTDIR}/i2c_sample.err\\\" $(ASM_OPTIONS)    -o\\\"${OBJECTDIR}/i2c_sample.o\\\" \\\"i2c_sample.asm\\\" 
+	@${DEP_GEN} -d "${OBJECTDIR}/i2c_sample.o"
+	@${FIXDEPS} "${OBJECTDIR}/i2c_sample.o.d" $(SILENT) -rsi ${MP_AS_DIR} -c18 
+	
+${OBJECTDIR}/spi_sample.o: spi_sample.asm  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}" 
+	@${RM} ${OBJECTDIR}/spi_sample.o.d 
+	@${RM} ${OBJECTDIR}/spi_sample.o 
+	@${FIXDEPS} dummy.d -e "${OBJECTDIR}/spi_sample.err" $(SILENT) -c ${MP_AS} $(MP_EXTRA_AS_PRE) -d__DEBUG -d__MPLAB_DEBUGGER_PK3=1 -q -p$(MP_PROCESSOR_OPTION) -u  -l\\\"${OBJECTDIR}/spi_sample.lst\\\" -e\\\"${OBJECTDIR}/spi_sample.err\\\" $(ASM_OPTIONS)    -o\\\"${OBJECTDIR}/spi_sample.o\\\" \\\"spi_sample.asm\\\" 
+	@${DEP_GEN} -d "${OBJECTDIR}/spi_sample.o"
+	@${FIXDEPS} "${OBJECTDIR}/spi_sample.o.d" $(SILENT) -rsi ${MP_AS_DIR} -c18 
+	
 else
 ${OBJECTDIR}/blinker_led.o: blinker_led.asm  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} "${OBJECTDIR}" 
@@ -110,6 +150,46 @@ ${OBJECTDIR}/blinker_led.o: blinker_led.asm  nbproject/Makefile-${CND_CONF}.mk
 	@${FIXDEPS} dummy.d -e "${OBJECTDIR}/blinker_led.err" $(SILENT) -c ${MP_AS} $(MP_EXTRA_AS_PRE) -q -p$(MP_PROCESSOR_OPTION) -u  -l\\\"${OBJECTDIR}/blinker_led.lst\\\" -e\\\"${OBJECTDIR}/blinker_led.err\\\" $(ASM_OPTIONS)    -o\\\"${OBJECTDIR}/blinker_led.o\\\" \\\"blinker_led.asm\\\" 
 	@${DEP_GEN} -d "${OBJECTDIR}/blinker_led.o"
 	@${FIXDEPS} "${OBJECTDIR}/blinker_led.o.d" $(SILENT) -rsi ${MP_AS_DIR} -c18 
+	
+${OBJECTDIR}/delay_16mhz.o: delay_16mhz.asm  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}" 
+	@${RM} ${OBJECTDIR}/delay_16mhz.o.d 
+	@${RM} ${OBJECTDIR}/delay_16mhz.o 
+	@${FIXDEPS} dummy.d -e "${OBJECTDIR}/delay_16mhz.err" $(SILENT) -c ${MP_AS} $(MP_EXTRA_AS_PRE) -q -p$(MP_PROCESSOR_OPTION) -u  -l\\\"${OBJECTDIR}/delay_16mhz.lst\\\" -e\\\"${OBJECTDIR}/delay_16mhz.err\\\" $(ASM_OPTIONS)    -o\\\"${OBJECTDIR}/delay_16mhz.o\\\" \\\"delay_16mhz.asm\\\" 
+	@${DEP_GEN} -d "${OBJECTDIR}/delay_16mhz.o"
+	@${FIXDEPS} "${OBJECTDIR}/delay_16mhz.o.d" $(SILENT) -rsi ${MP_AS_DIR} -c18 
+	
+${OBJECTDIR}/delay_4mhz.o: delay_4mhz.asm  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}" 
+	@${RM} ${OBJECTDIR}/delay_4mhz.o.d 
+	@${RM} ${OBJECTDIR}/delay_4mhz.o 
+	@${FIXDEPS} dummy.d -e "${OBJECTDIR}/delay_4mhz.err" $(SILENT) -c ${MP_AS} $(MP_EXTRA_AS_PRE) -q -p$(MP_PROCESSOR_OPTION) -u  -l\\\"${OBJECTDIR}/delay_4mhz.lst\\\" -e\\\"${OBJECTDIR}/delay_4mhz.err\\\" $(ASM_OPTIONS)    -o\\\"${OBJECTDIR}/delay_4mhz.o\\\" \\\"delay_4mhz.asm\\\" 
+	@${DEP_GEN} -d "${OBJECTDIR}/delay_4mhz.o"
+	@${FIXDEPS} "${OBJECTDIR}/delay_4mhz.o.d" $(SILENT) -rsi ${MP_AS_DIR} -c18 
+	
+${OBJECTDIR}/uart_sample.o: uart_sample.asm  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}" 
+	@${RM} ${OBJECTDIR}/uart_sample.o.d 
+	@${RM} ${OBJECTDIR}/uart_sample.o 
+	@${FIXDEPS} dummy.d -e "${OBJECTDIR}/uart_sample.err" $(SILENT) -c ${MP_AS} $(MP_EXTRA_AS_PRE) -q -p$(MP_PROCESSOR_OPTION) -u  -l\\\"${OBJECTDIR}/uart_sample.lst\\\" -e\\\"${OBJECTDIR}/uart_sample.err\\\" $(ASM_OPTIONS)    -o\\\"${OBJECTDIR}/uart_sample.o\\\" \\\"uart_sample.asm\\\" 
+	@${DEP_GEN} -d "${OBJECTDIR}/uart_sample.o"
+	@${FIXDEPS} "${OBJECTDIR}/uart_sample.o.d" $(SILENT) -rsi ${MP_AS_DIR} -c18 
+	
+${OBJECTDIR}/i2c_sample.o: i2c_sample.asm  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}" 
+	@${RM} ${OBJECTDIR}/i2c_sample.o.d 
+	@${RM} ${OBJECTDIR}/i2c_sample.o 
+	@${FIXDEPS} dummy.d -e "${OBJECTDIR}/i2c_sample.err" $(SILENT) -c ${MP_AS} $(MP_EXTRA_AS_PRE) -q -p$(MP_PROCESSOR_OPTION) -u  -l\\\"${OBJECTDIR}/i2c_sample.lst\\\" -e\\\"${OBJECTDIR}/i2c_sample.err\\\" $(ASM_OPTIONS)    -o\\\"${OBJECTDIR}/i2c_sample.o\\\" \\\"i2c_sample.asm\\\" 
+	@${DEP_GEN} -d "${OBJECTDIR}/i2c_sample.o"
+	@${FIXDEPS} "${OBJECTDIR}/i2c_sample.o.d" $(SILENT) -rsi ${MP_AS_DIR} -c18 
+	
+${OBJECTDIR}/spi_sample.o: spi_sample.asm  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}" 
+	@${RM} ${OBJECTDIR}/spi_sample.o.d 
+	@${RM} ${OBJECTDIR}/spi_sample.o 
+	@${FIXDEPS} dummy.d -e "${OBJECTDIR}/spi_sample.err" $(SILENT) -c ${MP_AS} $(MP_EXTRA_AS_PRE) -q -p$(MP_PROCESSOR_OPTION) -u  -l\\\"${OBJECTDIR}/spi_sample.lst\\\" -e\\\"${OBJECTDIR}/spi_sample.err\\\" $(ASM_OPTIONS)    -o\\\"${OBJECTDIR}/spi_sample.o\\\" \\\"spi_sample.asm\\\" 
+	@${DEP_GEN} -d "${OBJECTDIR}/spi_sample.o"
+	@${FIXDEPS} "${OBJECTDIR}/spi_sample.o.d" $(SILENT) -rsi ${MP_AS_DIR} -c18 
 	
 endif
 
