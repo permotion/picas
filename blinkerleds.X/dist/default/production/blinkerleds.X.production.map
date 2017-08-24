@@ -1,0 +1,64 @@
+MPLINK 5.08, LINKER
+Linker Map File - Created Mon Jul 24 16:13:04 2017
+
+                                 Section Info
+                  Section       Type    Address   Location Size(Bytes)
+                ---------  ---------  ---------  ---------  ---------
+                   .org_1       code   0x000000    program   0x000004
+                   .cinit    romdata   0x000002    program   0x000004
+                   .org_2       code   0x000004    program   0x00004c
+.config_8007_BUILD/DEFAULT/PRODUCTION/MAIN.O       code   0x008007    program   0x000002
+.config_8008_BUILD/DEFAULT/PRODUCTION/MAIN.O       code   0x008008    program   0x000002
+                   .org_0       code   0x00f000    program   0x000008
+
+
+
+                              Program Memory Usage 
+                               Start         End      
+                           ---------   ---------      
+                            0x000000    0x000029      
+                            0x008007    0x008008      
+                            0x00f000    0x00f003      
+            48 out of 2311 program addresses used, program memory utilization is 2%
+
+
+
+                              Symbols - Sorted by Name
+                     Name    Address   Location    Storage File                     
+                ---------  ---------  ---------  --------- ---------                
+             BLINKER_LOOP   0x000006    program     static /Users/permotion/Documents/PIC/MPLABXProjects/blinkerleds.X/main.asm
+                   DATAEE   0x00f000    program     static /Users/permotion/Documents/PIC/MPLABXProjects/blinkerleds.X/main.asm
+              DELAY_500mS   0x00001a    program     static /Users/permotion/Documents/PIC/MPLABXProjects/blinkerleds.X/main.asm
+          DELAY_500mS_END   0x000029    program     static /Users/permotion/Documents/PIC/MPLABXProjects/blinkerleds.X/main.asm
+       DELAY_500mS_loop_0   0x000020    program     static /Users/permotion/Documents/PIC/MPLABXProjects/blinkerleds.X/main.asm
+                    SETUP   0x000010    program     static /Users/permotion/Documents/PIC/MPLABXProjects/blinkerleds.X/main.asm
+                SETUP_END   0x000019    program     static /Users/permotion/Documents/PIC/MPLABXProjects/blinkerleds.X/main.asm
+                    START   0x000005    program     static /Users/permotion/Documents/PIC/MPLABXProjects/blinkerleds.X/main.asm
+             _.org_2_000F   0x00000f    program     static /Users/permotion/Documents/PIC/MPLABXProjects/blinkerleds.X/main.asm
+             _.org_2_0021   0x000021    program     static /Users/permotion/Documents/PIC/MPLABXProjects/blinkerleds.X/main.asm
+             _.org_2_0023   0x000023    program     static /Users/permotion/Documents/PIC/MPLABXProjects/blinkerleds.X/main.asm
+             _.org_2_0026   0x000026    program     static /Users/permotion/Documents/PIC/MPLABXProjects/blinkerleds.X/main.asm
+             _.org_2_0027   0x000027    program     static /Users/permotion/Documents/PIC/MPLABXProjects/blinkerleds.X/main.asm
+             _.org_2_0028   0x000028    program     static /Users/permotion/Documents/PIC/MPLABXProjects/blinkerleds.X/main.asm
+
+
+
+                              Symbols - Sorted by Address
+                     Name    Address   Location    Storage File                     
+                ---------  ---------  ---------  --------- ---------                
+                    START   0x000005    program     static /Users/permotion/Documents/PIC/MPLABXProjects/blinkerleds.X/main.asm
+             BLINKER_LOOP   0x000006    program     static /Users/permotion/Documents/PIC/MPLABXProjects/blinkerleds.X/main.asm
+             _.org_2_000F   0x00000f    program     static /Users/permotion/Documents/PIC/MPLABXProjects/blinkerleds.X/main.asm
+                    SETUP   0x000010    program     static /Users/permotion/Documents/PIC/MPLABXProjects/blinkerleds.X/main.asm
+                SETUP_END   0x000019    program     static /Users/permotion/Documents/PIC/MPLABXProjects/blinkerleds.X/main.asm
+              DELAY_500mS   0x00001a    program     static /Users/permotion/Documents/PIC/MPLABXProjects/blinkerleds.X/main.asm
+       DELAY_500mS_loop_0   0x000020    program     static /Users/permotion/Documents/PIC/MPLABXProjects/blinkerleds.X/main.asm
+             _.org_2_0021   0x000021    program     static /Users/permotion/Documents/PIC/MPLABXProjects/blinkerleds.X/main.asm
+             _.org_2_0023   0x000023    program     static /Users/permotion/Documents/PIC/MPLABXProjects/blinkerleds.X/main.asm
+             _.org_2_0026   0x000026    program     static /Users/permotion/Documents/PIC/MPLABXProjects/blinkerleds.X/main.asm
+             _.org_2_0027   0x000027    program     static /Users/permotion/Documents/PIC/MPLABXProjects/blinkerleds.X/main.asm
+             _.org_2_0028   0x000028    program     static /Users/permotion/Documents/PIC/MPLABXProjects/blinkerleds.X/main.asm
+          DELAY_500mS_END   0x000029    program     static /Users/permotion/Documents/PIC/MPLABXProjects/blinkerleds.X/main.asm
+                   DATAEE   0x00f000    program     static /Users/permotion/Documents/PIC/MPLABXProjects/blinkerleds.X/main.asm
+
+

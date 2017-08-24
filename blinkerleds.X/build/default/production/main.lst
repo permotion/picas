@@ -1,0 +1,918 @@
+MPASM 5.73  /USERS/PERMOTION/DOCUMENTS/PIC/M   7-24-2017  16:13:04         PAGE  1
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      00001 ;******************************************************************************
+                      00002 ;   This file is a basic code template for code generation on the             *
+                      00003 ;   PIC12F1822. This file contains the basic code building blocks to build    *
+                      00004 ;   upon.                                                                     *
+                      00005 ;                                                                             *
+                      00006 ;   Refer to the MPASM User's Guide for additional information on             *
+                      00007 ;   features of the assembler.                                                *
+                      00008 ;                                                                             *
+                      00009 ;   Refer to the respective data sheet for additional                         *
+                      00010 ;   information on the instruction set.                                       *
+                      00011 ;                                                                             *
+                      00012 ;******************************************************************************
+                      00013 ;                                                                             *
+                      00014 ;    Filename:      main.asm                                                  *
+                      00015 ;    Date:          18/06/2017                                                *
+                      00016 ;    File Version:  1                                                         *
+                      00017 ;                                                                             *
+                      00018 ;    Author:                                                      *
+                      00019 ;    Company:                                                                 *
+                      00020 ;                                                                             *
+                      00021 ;                                                                             *
+                      00022 ;******************************************************************************
+                      00023 ;                                                                             *
+                      00024 ;    Files Required: P12F1822.INC                                             *
+                      00025 ;                                                                             *
+                      00026 ;******************************************************************************
+                      00027 ;                                                                             *
+                      00028 ;    Notes:                                                                   *
+                      00029 ;                                                                             *
+                      00030 ;******************************************************************************
+                      00031 ;                                                                             *
+                      00032 ;    Revision History:                                                        *
+                      00033 ;                                                                             *
+                      00034 ;******************************************************************************
+                      00035 
+                      00036 
+                      00037         list            p=12F1822      ; list directive to define processor
+                      00038         #include        <p12F1822.inc> ; processor specific variable definitions
+                      00001         LIST
+                      00002 
+                      00003 ;==========================================================================
+                      00004 ; Build date : Nov 17 2016
+                      00005 ;  MPASM PIC12F1822 processor include
+                      00006 ; 
+                      00007 ;  (c) Copyright 1999-2016 Microchip Technology, All rights reserved
+                      00008 ;==========================================================================
+                      00009 
+                      01040         LIST
+                      00039         #include        <HARDWARE_CFG.inc> ; hardware definitions
+                      00001 ;------------------------------------------------------------------------------
+                      00002 ;
+                      00003 ; PIC HARDWARE CONFIGURATION
+                      00004 ;    
+MPASM 5.73  /USERS/PERMOTION/DOCUMENTS/PIC/M   7-24-2017  16:13:04         PAGE  2
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      00005 ;------------------------------------------------------------------------------    
+                      00006 
+                      00007 ; OSCILLATOR FREQUENCY
+                      00008 ;#define CLOCK_32MHZ
+                      00009 ;#define CLOCK_16MHZ
+                      00010 ;#define CLOCK_8MHZ
+                      00011 #define CLOCK_4MHZ
+                      00012 
+                      00013 
+                      00040         
+                      00041         #ifdef  CLOCK_32MHZ 
+                      00042             #define FREQ_CLOCK  d'32000000'
+                      00043         #endif
+                      00044         #ifdef  CLOCK_16MHZ
+                      00045             #define FREQ_CLOCK  d'16000000'
+                      00046         #endif
+                      00047         #ifdef  CLOCK_8MHZ
+                      00048             #define FREQ_CLOCK  d'8000000'
+                      00049         #endif
+                      00050         #ifdef  CLOCK_4MHZ
+                      00051             #define FREQ_CLOCK  d'4000000' 
+                      00052         #endif
+                      00053 ;------------------------------------------------------------------------------
+                      00054 ;
+                      00055 ; CONFIGURATION WORD SETUP
+                      00056 ;
+                      00057 ; The 'CONFIG' directive is used to embed the configuration word within the 
+                      00058 ; .asm file. The lables following the directive are located in the respective 
+                      00059 ; .inc file.  See the data sheet for additional information on configuration 
+                      00060 ; word settings.
+                      00061 ;
+                      00062 ;------------------------------------------------------------------------------    
+                      00063 
+8007   09E4           00064     __CONFIG _CONFIG1, _FOSC_INTOSC & _WDTE_OFF & _PWRTE_OFF & _MCLRE_ON & _CP_OFF & _CPD_OFF & _BOREN_O
+                            FF & _CLKOUTEN_OFF & _IESO_OFF & _FCMEN_OFF
+8008   1CFF           00065     __CONFIG _CONFIG2, _WRT_OFF & _PLLEN_OFF & _STVREN_OFF & _BORV_19 & _LVP_OFF
+                      00066 
+                      00067 ;------------------------------------------------------------------------------
+                      00068 ; VARIABLE DEFINITIONS
+                      00069 ;
+                      00070 ; Available Data Memory divided into Bank 0-15.  Each Bank may contain 
+                      00071 ; Special Function Registers, General Purpose Registers, and Access RAM 
+                      00072 ;
+                      00073 ;------------------------------------------------------------------------------
+                      00074 
+  0000007D            00075 delay1        EQU    0x7D        ; Sample user registers (common RAM)
+  0000007E            00076 delay2        EQU    0x7E        ; 
+  0000007F            00077 delay3        EQU    0x7F        ; 
+                      00078 
+                      00079 ;------------------------------------------------------------------------------
+                      00080 ; EEPROM INITIALIZATION
+                      00081 ;
+                      00082 ; The 12F1822 has 256 bytes of non-volatile EEPROM, starting at address 0xF000
+MPASM 5.73  /USERS/PERMOTION/DOCUMENTS/PIC/M   7-24-2017  16:13:04         PAGE  3
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      00083 ; 
+                      00084 ;------------------------------------------------------------------------------
+                      00085 
+                      00086 DATAEE    ORG  0xF000
+F000   004D 0043 0048 00087     DE    "MCHP"  ; Place 'M' 'C' 'H' 'P' at address 0,1,2,3
+       0050 
+                      00088 
+                      00089 ;------------------------------------------------------------------------------
+                      00090 ; RESET VECTOR
+                      00091 ;------------------------------------------------------------------------------
+                      00092 
+                      00093     ORG     0x0000            ; processor reset vector
+0000   2???           00094     CALL    SETUP             ; program configuration routine
+0001   2???           00095     GOTO    START             ; When using debug header, first inst.
+                      00096                               ; may be passed over by ICD2.  
+                      00097 
+                      00098 ;------------------------------------------------------------------------------
+                      00099 ; INTERRUPT SERVICE ROUTINE
+                      00100 ;------------------------------------------------------------------------------
+                      00101 
+                      00102     ORG      0x0004
+                      00103 
+                      00104 ;------------------------------------------------------------------------------
+                      00105 ; USER INTERRUPT SERVICE ROUTINE GOES HERE
+                      00106 ;------------------------------------------------------------------------------
+                      00107 
+                      00108 ; Note the 12F1822 family automatically handles context restoration for 
+                      00109 ; W, STATUS, BSR, FSR, and PCLATH where previous templates for 16F families
+                      00110 ; required manual restoration.  Shadow registers store these SFR values, and
+                      00111 ; shadow registers may be modified since they are readable and writable for
+                      00112 ; modification to the context restoration.    
+                      00113 
+0004   0009           00114     RETFIE                    ; return from interrupt
+                      00115     
+                      00116 ;------------------------------------------------------------------------------
+                      00117 ; MAIN PROGRAM
+                      00118 ;------------------------------------------------------------------------------
+                      00119 
+0005                  00120 START
+                      00121 
+                      00122 ;------------------------------------------------------------------------------
+                      00123 ; PLACE USER PROGRAM HERE
+                      00124 ;------------------------------------------------------------------------------
+                      00125     
+0005   0020           00126     BANKSEL PORTA
+0006                  00127 BLINKER_LOOP    
+0006   168C           00128     BSF     PORTA, RA5 ; green led
+0007   160C           00129     BSF     PORTA, RA4 ; yellow led
+0008   150C           00130     BSF     PORTA, RA2 ; blue led & buzzer
+0009   2???           00131     CALL    DELAY_500mS
+000A   128C           00132     BCF     PORTA, RA5
+000B   120C           00133     BCF     PORTA, RA4
+000C   110C           00134     BCF     PORTA, RA2
+MPASM 5.73  /USERS/PERMOTION/DOCUMENTS/PIC/M   7-24-2017  16:13:04         PAGE  4
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+000D   2???           00135     CALL    DELAY_500mS
+                      00136     
+000E   2???           00137     GOTO BLINKER_LOOP
+                      00138     
+000F   2???           00139     GOTO $
+                      00140     
+                      00141 ;-----------------------------------------------
+0010                  00142 SETUP:
+0010   0021           00143     BANKSEL OSCCON ; OSCILLATOR CONTROL REGISTER
+                      00144     #if (FREQ_CLOCK == d'32000000') ;1110
+                      00145     MOVLW   B'01110000'
+                      00146     #endif 
+                      00147     #if (FREQ_CLOCK == d'16000000') ;1111
+                      00148     MOVLW   B'01111000'
+                      00149     #endif
+                      00150     #if (FREQ_CLOCK == d'8000000') ;1110
+                      00151     MOVLW   B'01110000'
+                      00152     #endif
+                      00153     #if (FREQ_CLOCK == d'4000000') ;1101
+0011   3068           00154     MOVLW   B'01101000'
+                      00155     #endif
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0012   0099           00156     MOVWF   OSCCON
+                      00157     
+                      00158     ;INITIALIZING PORTA
+0013   0020           00159     BANKSEL PORTA
+0014   018C           00160     CLRF PORTA
+0015   0023           00161     BANKSEL ANSELA ; ANALOG SELECT (PORT A)
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0016   018C           00162     CLRF    ANSELA ; configure all RAx as digital I/O
+0017   0021           00163     BANKSEL TRISA ; TRI-STATE REGISTER
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0018   018C           00164     CLRF    TRISA ; configure all RAx as a digital output
+                      00165     
+0019                  00166 SETUP_END:
+0019   0008           00167     RETURN
+                      00168 ;-----------------------------------------------
+                      00169     
+                      00170 ;-----------------------------------------------    
+                      00171 ; Delay = 0.5 seconds = 500000 cycles
+                      00172 ; Clock frequency = 4 MHz
+                      00173 ; Based on http://www.piclist.com/techref/piclist/codegen/delay.htm
+001A                  00174 DELAY_500mS:
+001A   3003           00175         movlw   0x03
+001B   00FD           00176         movwf   delay1
+001C   3018           00177         movlw   0x18
+001D   00FE           00178         movwf   delay2
+001E   3002           00179         movlw   0x02
+001F   00FF           00180         movwf   delay3
+0020                  00181 DELAY_500mS_loop_0
+0020   0BFD           00182         decfsz  delay1, f
+0021   2???           00183         goto    $+2
+0022   0BFE           00184         decfsz  delay2, f
+MPASM 5.73  /USERS/PERMOTION/DOCUMENTS/PIC/M   7-24-2017  16:13:04         PAGE  5
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+0023   2???           00185         goto    $+2
+0024   0BFF           00186         decfsz  delay3, f
+0025   2???           00187         goto    DELAY_500mS_loop_0
+                      00188                         ;6 cycles
+0026   2???           00189         goto    $+1
+0027   2???           00190         goto    $+1
+0028   2???           00191         goto    $+1
+0029                  00192 DELAY_500mS_END: 
+0029   0008           00193     RETURN
+                      00194 ;-----------------------------------------------
+                      00195     
+09E4 1CFF             00196     END
+MPASM 5.73  /USERS/PERMOTION/DOCUMENTS/PIC/M   7-24-2017  16:13:04         PAGE  6
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+ABDEN                             00000000
+ABDOVF                            00000007
+ACKDT                             00000005
+ACKEN                             00000004
+ACKSTAT                           00000006
+ACKTIM                            00000007
+ADCON0                            0000009D
+ADCON1                            0000009E
+ADCS0                             00000004
+ADCS1                             00000005
+ADCS2                             00000006
+ADDEN                             00000003
+ADFM                              00000007
+ADFVR0                            00000000
+ADFVR1                            00000001
+ADGO                              00000001
+ADIE                              00000006
+ADIF                              00000006
+ADON                              00000000
+ADPREF0                           00000000
+ADPREF1                           00000001
+ADRES                             0000009B
+ADRESH                            0000009C
+ADRESL                            0000009B
+AHEN                              00000001
+AN0                               00000000
+AN1                               00000001
+AN2                               00000002
+AN3                               00000004
+ANSA0                             00000000
+ANSA1                             00000001
+ANSA2                             00000002
+ANSA4                             00000004
+ANSELA                            0000018C
+APFCON                            0000011D
+APFCON0                           0000011D
+BAUDCON                           0000019F
+BCL1IE                            00000003
+BCL1IF                            00000003
+BF                                00000000
+BLINKER_LOOP                      00000006
+BOEN                              00000004
+BORCON                            00000116
+BORRDY                            00000000
+BRG16                             00000003
+BRGH                              00000002
+BSR                               00000008
+BSR0                              00000000
+BSR1                              00000001
+BSR2                              00000002
+BSR3                              00000003
+BSR4                              00000004
+BSR_SHAD                          00000FE6
+MPASM 5.73  /USERS/PERMOTION/DOCUMENTS/PIC/M   7-24-2017  16:13:04         PAGE  7
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+C                                 00000000
+C1HYS                             00000001
+C1IE                              00000005
+C1IF                              00000005
+C1IN0N                            00000001
+C1IN1N                            00000004
+C1INP                             00000000
+C1INTN                            00000006
+C1INTP                            00000007
+C1NCH0                            00000000
+C1OE                              00000005
+C1ON                              00000007
+C1OUT_CM1CON0                     00000006
+C1OUT_PORTA                       00000002
+C1PCH0                            00000004
+C1PCH1                            00000005
+C1POL                             00000004
+C1SP                              00000002
+C1SYNC                            00000000
+CCP1AS                            00000295
+CCP1AS0                           00000004
+CCP1AS1                           00000005
+CCP1AS2                           00000006
+CCP1ASE                           00000007
+CCP1CON                           00000293
+CCP1IE                            00000002
+CCP1IF                            00000002
+CCP1M0                            00000000
+CCP1M1                            00000001
+CCP1M2                            00000002
+CCP1M3                            00000003
+CCP1SEL                           00000000
+CCPR1                             00000291
+CCPR1H                            00000292
+CCPR1L                            00000291
+CDAFVR0                           00000002
+CDAFVR1                           00000003
+CFGS                              00000006
+CHS0                              00000002
+CHS1                              00000003
+CHS2                              00000004
+CHS3                              00000005
+CHS4                              00000006
+CKE                               00000006
+CKP                               00000004
+CLKIN                             00000005
+CLKOUT                            00000004
+CLKR                              00000004
+CLKRCON                           0000039A
+CLKRDC0                           00000003
+CLKRDC1                           00000004
+CLKRDIV0                          00000000
+CLKRDIV1                          00000001
+MPASM 5.73  /USERS/PERMOTION/DOCUMENTS/PIC/M   7-24-2017  16:13:04         PAGE  8
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+CLKRDIV2                          00000002
+CLKREN                            00000007
+CLKROE                            00000006
+CLKRSLR                           00000005
+CLOCK_4MHZ                        
+CM1CON0                           00000111
+CM1CON1                           00000112
+CMOUT                             00000115
+CPS0                              00000000
+CPS1                              00000001
+CPS2                              00000002
+CPS3                              00000004
+CPSCH0                            00000000
+CPSCH1                            00000001
+CPSCON0                           0000001E
+CPSCON1                           0000001F
+CPSON                             00000007
+CPSOUT                            00000001
+CPSRM                             00000006
+CPSRNG0                           00000002
+CPSRNG1                           00000003
+CREN                              00000004
+CSRC                              00000007
+C_SHAD                            00000000
+DACCON0                           00000118
+DACCON1                           00000119
+DACEN                             00000007
+DACLPS                            00000006
+DACOE                             00000005
+DACOUT                            00000000
+DACPSS0                           00000002
+DACPSS1                           00000003
+DACR0                             00000000
+DACR1                             00000001
+DACR2                             00000002
+DACR3                             00000003
+DACR4                             00000004
+DATAEE                            0000F000
+DC                                00000001
+DC1B0                             00000004
+DC1B1                             00000005
+DC_SHAD                           00000001
+DELAY_500mS                       0000001A
+DELAY_500mS_END                   00000029
+DELAY_500mS_loop_0                00000020
+DHEN                              00000000
+D_NOT_A                           00000005
+ECCP1AS                           00000295
+EEADR                             00000191
+EEADRH                            00000192
+EEADRL                            00000191
+EECON1                            00000195
+EECON2                            00000196
+MPASM 5.73  /USERS/PERMOTION/DOCUMENTS/PIC/M   7-24-2017  16:13:04         PAGE  9
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+EEDAT                             00000193
+EEDATH                            00000194
+EEDATL                            00000193
+EEIE                              00000004
+EEIF                              00000004
+EEPGD                             00000007
+F                                 00000001
+FERR                              00000002
+FLT0                              00000002
+FREE                              00000004
+FREQ_CLOCK                        d'4000000'
+FSR0                              00000004
+FSR0H                             00000005
+FSR0H_SHAD                        00000FE9
+FSR0L                             00000004
+FSR0L_SHAD                        00000FE8
+FSR1                              00000006
+FSR1H                             00000007
+FSR1H_SHAD                        00000FEB
+FSR1L                             00000006
+FSR1L_SHAD                        00000FEA
+FVRCON                            00000117
+FVREN                             00000007
+FVRRDY                            00000006
+GCEN                              00000007
+GIE                               00000007
+GO                                00000001
+GO_NOT_DONE                       00000001
+HFIOFL                            00000003
+HFIOFR                            00000004
+HFIOFS                            00000000
+INDF0                             00000000
+INDF1                             00000001
+INTCON                            0000000B
+INTE                              00000004
+INTEDG                            00000006
+INTF                              00000001
+IOCAF                             00000393
+IOCAF0                            00000000
+IOCAF1                            00000001
+IOCAF2                            00000002
+IOCAF3                            00000003
+IOCAF4                            00000004
+IOCAF5                            00000005
+IOCAN                             00000392
+IOCAN0                            00000000
+IOCAN1                            00000001
+IOCAN2                            00000002
+IOCAN3                            00000003
+IOCAN4                            00000004
+IOCAN5                            00000005
+IOCAP                             00000391
+IOCAP0                            00000000
+MPASM 5.73  /USERS/PERMOTION/DOCUMENTS/PIC/M   7-24-2017  16:13:04         PAGE 10
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+IOCAP1                            00000001
+IOCAP2                            00000002
+IOCAP3                            00000003
+IOCAP4                            00000004
+IOCAP5                            00000005
+IOCIE                             00000003
+IOCIF                             00000000
+IRCF0                             00000003
+IRCF1                             00000004
+IRCF2                             00000005
+IRCF3                             00000006
+LATA                              0000010C
+LATA0                             00000000
+LATA1                             00000001
+LATA2                             00000002
+LATA4                             00000004
+LATA5                             00000005
+LFIOFR                            00000001
+LWLO                              00000005
+MC1OUT                            00000000
+MDBIT                             00000000
+MDCARH                            0000039F
+MDCARL                            0000039E
+MDCH0                             00000000
+MDCH1                             00000001
+MDCH2                             00000002
+MDCH3                             00000003
+MDCHODIS                          00000007
+MDCHPOL                           00000006
+MDCHSYNC                          00000005
+MDCIN1                            00000002
+MDCIN2                            00000004
+MDCL0                             00000000
+MDCL1                             00000001
+MDCL2                             00000002
+MDCL3                             00000003
+MDCLODIS                          00000007
+MDCLPOL                           00000006
+MDCLSYNC                          00000005
+MDCON                             0000039C
+MDEN                              00000007
+MDMIN                             00000001
+MDMS0                             00000000
+MDMS1                             00000001
+MDMS2                             00000002
+MDMS3                             00000003
+MDMSODIS                          00000007
+MDOE                              00000006
+MDOPOL                            00000004
+MDOUT_MDCON                       00000003
+MDOUT_PORTA                       00000000
+MDSLR                             00000005
+MDSRC                             0000039D
+MPASM 5.73  /USERS/PERMOTION/DOCUMENTS/PIC/M   7-24-2017  16:13:04         PAGE 11
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+MFIOFR                            00000002
+NOT_BOR                           00000000
+NOT_DONE                          00000001
+NOT_MCLR                          00000003
+NOT_PD                            00000003
+NOT_POR                           00000001
+NOT_RI                            00000002
+NOT_RMCLR                         00000003
+NOT_T1SYNC                        00000002
+NOT_TO                            00000004
+NOT_WPUEN                         00000007
+OERR                              00000001
+OPTION_REG                        00000095
+OSC1                              00000005
+OSC2                              00000004
+OSCCON                            00000099
+OSCSTAT                           0000009A
+OSCTUNE                           00000098
+OSFIE                             00000007
+OSFIF                             00000007
+OSTS                              00000005
+P                                 00000004
+P1BSEL                            00000001
+P1DC0                             00000000
+P1DC1                             00000001
+P1DC2                             00000002
+P1DC3                             00000003
+P1DC4                             00000004
+P1DC5                             00000005
+P1DC6                             00000006
+P1M0                              00000006
+P1M1                              00000007
+P1RSEN                            00000007
+PCIE                              00000006
+PCL                               00000002
+PCLATH                            0000000A
+PCLATH_SHAD                       00000FE7
+PCON                              00000096
+PEIE                              00000006
+PEN                               00000002
+PIE1                              00000091
+PIE2                              00000092
+PIR1                              00000011
+PIR2                              00000012
+PLLR                              00000006
+PORTA                             0000000C
+PR2                               0000001B
+PS0                               00000000
+PS1                               00000001
+PS2                               00000002
+PSA                               00000003
+PSS1AC0                           00000002
+PSS1AC1                           00000003
+MPASM 5.73  /USERS/PERMOTION/DOCUMENTS/PIC/M   7-24-2017  16:13:04         PAGE 12
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+PSS1BD0                           00000000
+PSS1BD1                           00000001
+PSTR1CON                          00000296
+PWM1CON                           00000294
+RA0                               00000000
+RA1                               00000001
+RA2                               00000002
+RA3                               00000003
+RA4                               00000004
+RA5                               00000005
+RCEN                              00000003
+RCIDL                             00000006
+RCIE                              00000005
+RCIF                              00000005
+RCREG                             00000199
+RCSTA                             0000019D
+RD                                00000000
+RSEN                              00000001
+RX9                               00000006
+RX9D                              00000000
+RXDTSEL                           00000007
+R_NOT_W                           00000002
+S                                 00000003
+SBCDE                             00000002
+SBOREN                            00000007
+SCIE                              00000005
+SCK                               00000001
+SCKP                              00000004
+SCL                               00000001
+SCS0                              00000000
+SCS1                              00000001
+SDA                               00000002
+SDAHT                             00000003
+SDI                               00000002
+SDO1SEL                           00000006
+SDOSEL                            00000006
+SEN                               00000000
+SENDB                             00000003
+SETUP                             00000010
+SETUP_END                         00000019
+SMP                               00000007
+SP1BRG                            0000019B
+SP1BRGH                           0000019C
+SP1BRGL                           0000019B
+SPBRG                             0000019B
+SPBRGH                            0000019C
+SPBRGL                            0000019B
+SPEN                              00000007
+SPLLEN                            00000007
+SRCLK0                            00000004
+SRCLK1                            00000005
+SRCLK2                            00000006
+SRCON0                            0000011A
+MPASM 5.73  /USERS/PERMOTION/DOCUMENTS/PIC/M   7-24-2017  16:13:04         PAGE 13
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+SRCON1                            0000011B
+SREN                              00000005
+SRI                               00000001
+SRLEN                             00000007
+SRNQ                              00000005
+SRNQEN                            00000002
+SRPR                              00000000
+SRPS                              00000001
+SRQ                               00000002
+SRQEN                             00000003
+SRRC1E                            00000000
+SRRCKE                            00000002
+SRRPE                             00000003
+SRSC1E                            00000004
+SRSCKE                            00000006
+SRSPE                             00000007
+SS1SEL                            00000005
+SSP1ADD                           00000212
+SSP1BUF                           00000211
+SSP1CON1                          00000215
+SSP1CON2                          00000216
+SSP1CON3                          00000217
+SSP1IE                            00000003
+SSP1IF                            00000003
+SSP1MSK                           00000213
+SSP1STAT                          00000214
+SSPADD                            00000212
+SSPBUF                            00000211
+SSPCON                            00000215
+SSPCON1                           00000215
+SSPCON2                           00000216
+SSPCON3                           00000217
+SSPEN                             00000005
+SSPM0                             00000000
+SSPM1                             00000001
+SSPM2                             00000002
+SSPM3                             00000003
+SSPMSK                            00000213
+SSPOV                             00000006
+SSPSTAT                           00000214
+SSSEL                             00000005
+START                             00000005
+STATUS                            00000003
+STATUS_SHAD                       00000FE4
+STKOVF                            00000007
+STKPTR                            00000FED
+STKUNF                            00000006
+STR1A                             00000000
+STR1B                             00000001
+STR1C                             00000002
+STR1D                             00000003
+STR1SYNC                          00000004
+SWDTEN                            00000000
+MPASM 5.73  /USERS/PERMOTION/DOCUMENTS/PIC/M   7-24-2017  16:13:04         PAGE 14
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+SYNC                              00000004
+T0CKI                             00000002
+T0CS                              00000005
+T0IE                              00000005
+T0IF                              00000002
+T0SE                              00000004
+T0XCS                             00000000
+T1CKI                             00000005
+T1CKPS0                           00000004
+T1CKPS1                           00000005
+T1CON                             00000018
+T1GCON                            00000019
+T1GGO                             00000003
+T1GGO_NOT_DONE                    00000003
+T1GPOL                            00000006
+T1GSEL                            00000003
+T1GSPM                            00000004
+T1GSS0                            00000000
+T1GSS1                            00000001
+T1GTM                             00000005
+T1GVAL                            00000002
+T1OSCEN                           00000003
+T1OSCR                            00000007
+T1OSI                             00000005
+T1OSO                             00000004
+T2CKPS0                           00000000
+T2CKPS1                           00000001
+T2CON                             0000001C
+T2OUTPS0                          00000003
+T2OUTPS1                          00000004
+T2OUTPS2                          00000005
+T2OUTPS3                          00000006
+TMR0                              00000015
+TMR0CS                            00000005
+TMR0IE                            00000005
+TMR0IF                            00000002
+TMR0SE                            00000004
+TMR1                              00000016
+TMR1CS0                           00000006
+TMR1CS1                           00000007
+TMR1GE                            00000007
+TMR1GIE                           00000007
+TMR1GIF                           00000007
+TMR1H                             00000017
+TMR1IE                            00000000
+TMR1IF                            00000000
+TMR1L                             00000016
+TMR1ON                            00000000
+TMR2                              0000001A
+TMR2IE                            00000001
+TMR2IF                            00000001
+TMR2ON                            00000002
+TOSH                              00000FEF
+MPASM 5.73  /USERS/PERMOTION/DOCUMENTS/PIC/M   7-24-2017  16:13:04         PAGE 15
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+TOSL                              00000FEE
+TRISA                             0000008C
+TRISA0                            00000000
+TRISA1                            00000001
+TRISA2                            00000002
+TRISA3                            00000003
+TRISA4                            00000004
+TRISA5                            00000005
+TRMT                              00000001
+TSEN                              00000005
+TSRNG                             00000004
+TUN0                              00000000
+TUN1                              00000001
+TUN2                              00000002
+TUN3                              00000003
+TUN4                              00000004
+TUN5                              00000005
+TX9                               00000006
+TX9D                              00000000
+TXCKSEL                           00000002
+TXEN                              00000005
+TXIE                              00000004
+TXIF                              00000004
+TXREG                             0000019A
+TXSTA                             0000019E
+UA                                00000001
+W                                 00000000
+WCOL                              00000007
+WDTCON                            00000097
+WDTPS0                            00000001
+WDTPS1                            00000002
+WDTPS2                            00000003
+WDTPS3                            00000004
+WDTPS4                            00000005
+WPUA                              0000020C
+WPUA0                             00000000
+WPUA1                             00000001
+WPUA2                             00000002
+WPUA3                             00000003
+WPUA4                             00000004
+WPUA5                             00000005
+WR                                00000001
+WREG                              00000009
+WREG_SHAD                         00000FE5
+WREN                              00000002
+WRERR                             00000003
+WUE                               00000001
+Z                                 00000002
+Z_SHAD                            00000002
+_.org_2_000F                      0000000F
+_.org_2_0021                      00000021
+_.org_2_0023                      00000023
+_.org_2_0026                      00000026
+MPASM 5.73  /USERS/PERMOTION/DOCUMENTS/PIC/M   7-24-2017  16:13:04         PAGE 16
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+_.org_2_0027                      00000027
+_.org_2_0028                      00000028
+_BOREN_NSLEEP                     00003DFF
+_BOREN_OFF                        000039FF
+_BOREN_ON                         00003FFF
+_BOREN_SBODEN                     00003BFF
+_BORV_19                          00003FFF
+_BORV_HI                          00003BFF
+_BORV_LO                          00003FFF
+_CLKOUTEN_OFF                     00003FFF
+_CLKOUTEN_ON                      000037FF
+_CONFIG1                          00008007
+_CONFIG2                          00008008
+_CPD_OFF                          00003FFF
+_CPD_ON                           00003EFF
+_CP_OFF                           00003FFF
+_CP_ON                            00003F7F
+_DEVID1                           00008006
+_FCMEN_OFF                        00001FFF
+_FCMEN_ON                         00003FFF
+_FOSC_ECH                         00003FFF
+_FOSC_ECL                         00003FFD
+_FOSC_ECM                         00003FFE
+_FOSC_EXTRC                       00003FFB
+_FOSC_HS                          00003FFA
+_FOSC_INTOSC                      00003FFC
+_FOSC_LP                          00003FF8
+_FOSC_XT                          00003FF9
+_IDLOC0                           00008000
+_IDLOC1                           00008001
+_IDLOC2                           00008002
+_IDLOC3                           00008003
+_IESO_OFF                         00002FFF
+_IESO_ON                          00003FFF
+_LVP_OFF                          00001FFF
+_LVP_ON                           00003FFF
+_MCLRE_OFF                        00003FBF
+_MCLRE_ON                         00003FFF
+_PLLEN_OFF                        00003EFF
+_PLLEN_ON                         00003FFF
+_PWRTE_OFF                        00003FFF
+_PWRTE_ON                         00003FDF
+_STVREN_OFF                       00003DFF
+_STVREN_ON                        00003FFF
+_WDTE_NSLEEP                      00003FF7
+_WDTE_OFF                         00003FE7
+_WDTE_ON                          00003FFF
+_WDTE_SWDTEN                      00003FEF
+_WRT_ALL                          00003FFC
+_WRT_BOOT                         00003FFE
+_WRT_HALF                         00003FFD
+_WRT_OFF                          00003FFF
+__12F1822                         00000001
+MPASM 5.73  /USERS/PERMOTION/DOCUMENTS/PIC/M   7-24-2017  16:13:04         PAGE 17
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+delay1                            0000007D
+delay2                            0000007E
+delay3                            0000007F
+
+Errors   :     0
+Warnings :     0 reported,     0 suppressed
+Messages :     3 reported,     0 suppressed
+
+
